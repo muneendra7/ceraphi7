@@ -17,4 +17,5 @@ public interface ClientDetailsRepository extends JpaRepository<ClientDetails, Lo
     @Query("SELECT cd FROM ClientDetails cd WHERE cd.clientName LIKE %:searchTerm% OR cd.country LIKE %:searchTerm% OR cd.id LIKE %:searchTerm%")
     List<ClientDetails> searchPosts(@Param("searchTerm") String searchTerm);
 
+    boolean existsByEmail(String email);
 }

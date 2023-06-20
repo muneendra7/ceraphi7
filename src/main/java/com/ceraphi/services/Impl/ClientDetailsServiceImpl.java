@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,18 +28,20 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
         this.modelMapper = modelMapper;
     }
 
+//
     @Override
-    public ClientDetailsDTO saveClientDetails(ClientDetailsDTO clientDetailsDTO) {
-        Optional<ClientDetails> byEmail = clientDetailsRepository.findByEmail(clientDetailsDTO.getEmail());
-        ClientDetails clientDetails1 = byEmail.get();
-        if (byEmail == null) {
-            ClientDetails clientDetails = modelMapper.map(clientDetailsDTO, ClientDetails.class);
-            ClientDetails savedClientDetails = clientDetailsRepository.save(clientDetails);
-            return modelMapper.map(savedClientDetails, ClientDetailsDTO.class);
-        }else {
-//            return new ResourceNotFoundException("record with this email","is already present with id",clientDetails1.getId());
-       return  null;
+    public ClientDetailsDTO saveClientDetails(ClientDetailsDTO clientDetailsDto) {
+        String email = clientDetailsDto.getEmail();
+
+        // Check if email already exists
+        if (clientDetailsRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("Email already exists");
         }
+
+        // Continue with client creation
+        ClientDetails clientDetails = modelMapper.map(clientDetailsDto, ClientDetails.class);
+        ClientDetails savedClientDetails = clientDetailsRepository.save(clientDetails);
+        return modelMapper.map(savedClientDetails, ClientDetailsDTO.class);
     }
 
     @Override

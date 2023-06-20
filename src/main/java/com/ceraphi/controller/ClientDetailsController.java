@@ -58,10 +58,10 @@ public class ClientDetailsController {
     }
 
     @DeleteMapping("/{clientId}")
-    public ResponseEntity<String > deleteClientDetails(@PathVariable Long clientId) {
+    public ResponseEntity<Void> deleteClientDetails(@PathVariable Long clientId) {
         clientDetailsService.deleteClientDetails(clientId);
-        return ResponseEntity.ok("successfully deleted client with id"+clientId);
-//        return ResponseEntity.noContent().build();
+//        return ResponseEntity.ok("successfully deleted client with id"+clientId);
+        return ResponseEntity.noContent().build();
     }
     @GetMapping("/search")
     public ResponseEntity<List<ClientDetailsDTO>> searchPosts(@RequestParam(value = "query") String query){
